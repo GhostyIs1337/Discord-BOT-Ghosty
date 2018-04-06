@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Discord.Addons.Interactive" Version="1.0.1" />
+    <PackageReference Include="Discord.Addons.MinMaxCloseService" Version="1.0.2" />
+    <PackageReference Include="Discord.Addons.WebSocketSharp" Version="1.0.1" />
+    <PackageReference Include="Discord.Net" Version="1.0.2" />
+    <PackageReference Include="Discord.Net.Commands" Version="1.0.2" />
+    <PackageReference Include="Discord.Net.Core" Version="1.0.2" />
+    <PackageReference Include="Discord.Net.Rest" Version="1.0.2" />
+    <PackageReference Include="Discord.Net.Rpc" Version="1.0.2" />
+    <PackageReference Include="Discord.Net.Webhook" Version="1.0.2" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="1.0.2" />
+    <PackageReference Include="Google.Apis" Version="1.32.2" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.32.2.1162" />
+    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
+    <PackageReference Include="NAudio" Version="1.8.4" />
+    <PackageReference Include="NAudio.Vorbis" Version="1.0.0" />
+    <PackageReference Include="PUBGLibrary" Version="1.0.5" />
+    <PackageReference Include="PUBGSharp" Version="1.3.3" />
+    <PackageReference Include="SteamKit2" Version="2.0.0" />
+    <PackageReference Include="SteamWebAPI" Version="1.0.14.42195" />
+    <PackageReference Include="SteamWebAPI2" Version="4.0.8" />
+    <PackageReference Include="VideoLibrary" Version="1.3.5" />
+    <PackageReference Include="YamlDotNet" Version="4.3.1" />
+    <PackageReference Include="YoutubeExtractor" Version="0.10.11" />
+    <PackageReference Include="YoutubeSearch.dll" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ffmpeg.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ffplay.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ffprobe.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="libsodium.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="opus.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="youtube-dl.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="TwitchDotNet">
+      <HintPath>..\..\..\..\Downloads\TwitchDotNet-master\TwitchDotNet-master\TwitchDotNet\bin\Release\TwitchDotNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
