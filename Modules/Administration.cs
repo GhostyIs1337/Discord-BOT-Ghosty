@@ -28,6 +28,19 @@ namespace DiscordBot.Modules
             await user.Guild.AddBanAsync(user, 5, reason);
         }
 
+        [Command("unban")]
+        [Summary("This will unban a user.")]
+        [RequireUserPermission(GuildPermission.BanMembers)]
+        [RequireBotPermission(GuildPermission.BanMembers)]
+
+        public async Task UnbanUser(IGuildUser user, string reason = "No reason provided.")
+        {
+            await Context.Guild.RemoveBanAsync(user, null);
+            await ReplyAsync($"{user} has been unbanned!");
+
+        }
+
+
         [Command("purge")]
         [Summary("This will delete as many messages you input.")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
@@ -54,6 +67,47 @@ namespace DiscordBot.Modules
             {
                 await ReplyAsync("You can't delete more than 100 messages at once!");
             }
+        }
+
+
+
+        [Command("createtext")]
+        [Remarks("Make A Text Channel")]
+        [RequireUserPermission(GuildPermission.ManageChannels)]
+        public async Task Text(string channelname)
+        {
+            await Context.Guild.CreateTextChannelAsync(channelname);
+
+            await ReplyAsync($"Nice! I just made a new text channel named {channelname}.");
+
+        }
+
+        [Command("createvoice")]
+        [Remarks("Make A Voice Channel")]
+        [RequireUserPermission(GuildPermission.ManageChannels)]
+        public async Task Voice([Remainder]string channelname)
+        {
+            await Context.Guild.CreateVoiceChannelAsync(channelname);
+
+            await ReplyAsync($"Nice! I just made a new voice channel named {channelname}.");
+        }
+
+        public static readonly string url = "http://lmgtfy.com/?q=";
+
+        [Command("lmgtfy")]
+        [Summary("Responds with a lmgtfy link")]
+        public async Task Say(params string[] args)
+        {
+            string input = "";
+            for (int i = 0; i < args.Length - 1; i++)
+            {
+
+                input += args[i].Trim() + "+";
+            }
+            input += args[args.Length - 1];
+
+            input = url + input;
+            await Context.Channel.SendMessageAsync("URL fetched: " + input);
         }
     }
 }

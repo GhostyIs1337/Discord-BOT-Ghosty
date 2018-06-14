@@ -3,7 +3,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TwitchDotNet.Clients;
+//using TwitchDotNet.Clients;
+using DiscordBot.API_Keys;
 
 namespace DiscordBot.Modules
 {
@@ -14,20 +15,20 @@ namespace DiscordBot.Modules
         public async Task Twitty(string games)
         {
             var baseUrl = "https://api.twitch.tv";
-            var clientId = "your-api-token";
+            var clientId = "" + Keys.twitch;
 
             // Init an unauthenticated client with base url and client id
 
-            var client = new TwitchClient(baseUrl, clientId);
+            // var client = new TwitchClient(baseUrl, clientId);
 
             // Search for games
-            var result = await client.SearchGames($"{games}");
-            JObject response_object = JObject.Parse(result?.ToString()); // Parse to JObject
-            var found_game_list = JsonConvert.DeserializeObject<List<object>>(response_object["games"]?.ToString()); // Parse to list of game objects (refer to Twitch docs for returned JSON)
+            //var result = await client.SearchGames($"{games}");
+            //JObject response_object = JObject.Parse(result?.ToString()); // Parse to JObject
+            // var found_game_list = JsonConvert.DeserializeObject<List<object>>(response_object["games"]?.ToString()); // Parse to list of game objects (refer to Twitch docs for returned JSON)
 
             // Get streams summary
-            result = await client.GetStreamsSummary();
-            response_object = JObject.Parse(result?.ToString()); // Parse to JObject
+            //result = await client.GetStreamsSummary();
+            // response_object = JObject.Parse(result?.ToString()); // Parse to JObject
         }
     }
 }
