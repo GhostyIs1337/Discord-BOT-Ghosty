@@ -27,5 +27,15 @@ namespace DiscordBot.Modules
 
             await Context.Channel.SendMessageAsync("", false, embed);
         }
+
+        [Command("roll")]
+        [Summary("Rolls a dice of arbitrary size. (example: \'!roll 33\' rolls a 33-sided die)")]
+        public async Task Say(string argSize)
+        {
+            Random rand = new Random();
+            uint num = 0;
+            num = (uint)rand.Next(1, (int)Convert.ToUInt32(argSize, 10));
+            await Context.Channel.SendMessageAsync("You rolled a " + num);
+        }
     }
 }
