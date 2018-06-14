@@ -1,13 +1,18 @@
-﻿using Discord;
-using Discord.Commands;
-using Newtonsoft.Json;
-using PUBG.Services;
-using PUBGMatch.Services;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
-using DiscordBot.API_Keys;
+using Discord.Commands;
+using Discord.WebSocket;
+using Discord;
+using DiscordBot;
+using System.Linq;
+using System.Net;
+using Newtonsoft.Json;
+using System.Net.Http;
+using PUBG.Services;
+using System.Net.Http.Headers;
+using PUBGMatch.Services;
 
 namespace DiscordBot.Modules
 {
@@ -18,24 +23,24 @@ namespace DiscordBot.Modules
 
         public async Task PUBGID(string region, string user)
         {
-            var httpClient = new HttpClient();
+            HttpClient httpClient = new HttpClient();
 
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://api.playbattlegrounds.com/shards/{region}/players?filter[playerNames]={user}");
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://api.playbattlegrounds.com/shards/{region}/players?filter[playerNames]={user}");
 
             requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.api+json"));
 
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "" + Keys.PUBG);
+            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "your-api-token");
 
-            var response = await httpClient.SendAsync(requestMessage);
+            HttpResponseMessage response = await httpClient.SendAsync(requestMessage);
 
-            var responseData = await response.Content.ReadAsStringAsync();
+            string responseData = await response.Content.ReadAsStringAsync();
 
-            var pubgStats = JsonConvert.DeserializeObject<PUBGJson>(responseData);
+            PUBGJson pubgStats = JsonConvert.DeserializeObject<PUBGJson>(responseData);
 
             var name = pubgStats.data[0].attributes.Name;
             var titleID = pubgStats.data[0].attributes.titleId;
             var patchVer = pubgStats.data[0].attributes.patchVersion;
-            var iD = pubgStats.data[0].id;
+            var ID = pubgStats.data[0].id;
 
             var embed = new EmbedBuilder()
             {
@@ -44,12 +49,13 @@ namespace DiscordBot.Modules
 
             embed.Title = $"**{name}** information:";
             embed.Description = $"Game: **{titleID}**\n"
-                + $"Account ID: **{iD}**\n"
+                + $"Account ID: **{ID}**\n"
                 + $"Last 5 match IDs:\n";
 
             foreach (var match in pubgStats.data[0].relationships.matches.data.Take(5))
+            {
                 embed.Description += $"{match.id}\n";
-
+            }
 
             await ReplyAsync("", false, embed.Build());
         }
@@ -59,19 +65,19 @@ namespace DiscordBot.Modules
 
         public async Task PUBGMatch(string region, string matchID)
         {
-            var httpClient = new HttpClient();
+            HttpClient httpClient = new HttpClient();
 
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://api.playbattlegrounds.com/shards/{region}/matches/{matchID}");
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://api.playbattlegrounds.com/shards/{region}/matches/{matchID}");
 
             requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.api+json"));
 
-            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", Keys.PUBG);
+            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "your-api-token");
 
-            var response = await httpClient.SendAsync(requestMessage);
+            HttpResponseMessage response = await httpClient.SendAsync(requestMessage);
 
-            var responseData = await response.Content.ReadAsStringAsync();
+            string responseData = await response.Content.ReadAsStringAsync();
 
-            var pubgMatchStats = JsonConvert.DeserializeObject<PUBGMatchJson>(responseData);
+            PUBGMatchJson pubgMatchStats = JsonConvert.DeserializeObject<PUBGMatchJson>(responseData);
 
             var ID = pubgMatchStats.data.id;
             var gameMode = pubgMatchStats.data.attributes.gameMode;
@@ -93,6 +99,7 @@ namespace DiscordBot.Modules
             var timeSurvived = pubgMatchStats.included[1].attributes.stats.timeSurvived;
             var walkDistance = pubgMatchStats.included[1].attributes.stats.walkDistance;
             var weaponsAcquired = pubgMatchStats.included[1].attributes.stats.weaponsAcquired;
+
 
             var embed = new EmbedBuilder()
             {
@@ -119,6 +126,11 @@ namespace DiscordBot.Modules
                 + $"Death type: {deathType}\n";
 
             await ReplyAsync("", false, embed.Build());
+
+
         }
+
+
     }
 }
+

@@ -1,11 +1,9 @@
 ﻿using Discord;
 using Discord.Commands;
-using Newtonsoft.Json.Linq;
 using PortableSteam;
 using SteamWebAPI2.Interfaces;
 using System;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace DiscordBot.Modules
@@ -131,23 +129,5 @@ namespace DiscordBot.Modules
             => await ReplyAsync("https://steamcommunity.com/profiles/" +
                     (await steamUser.ResolveVanityUrlAsync(name ?? Context.User.Username)).Data
                 );
-
-        [Command("appinfo"), Summary("Fetches up application info from steam.")]
-        public async Task Say([Remainder, Summary("The appid to search for")] int appid)
-        {
-            string json = new WebClient().DownloadString("http://store.steampowered.com/api/appdetails?appids=" + "" + appid);
-            JObject obj = JObject.Parse(json);
-
-            string name = (string)obj["" + appid]["data"]["name"];
-            int age = (int)obj["" + appid]["data"]["required_age"];
-            string website = (string)obj["" + appid]["data"]["website"];
-            double price = (int)obj["" + appid]["data"]["price_overview"]["final"] / 100.0;
-
-            await Context.Channel.SendMessageAsync("Fetching Details: \n"
-                + "Name: " + name + "\n"
-                + "Minimum Age: " + age + "\n"
-                + "Price: $" + price + " (USD)\n"
-                + "More Info: " + website + " \n");
-        }
     }
 }

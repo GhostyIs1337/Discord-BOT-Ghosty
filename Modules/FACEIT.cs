@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Discord.WebSocket;
 using Discord;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.Net;
 using FaceitPlayerJson.Services;
 using FACEITGAMEJson.Services;
 using FaceitMatch.Services;
 using FaceitMatchID.Services;
-using DiscordBot.API_Keys;
 
 namespace DiscordBot.Modules
 {
@@ -25,7 +28,7 @@ namespace DiscordBot.Modules
             using (var httpClient = new HttpClient { BaseAddress = baseAddress })
             {
 
-                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "" + Keys.faceit);
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "your-api-token");
 
                 using (var response = await httpClient.GetAsync($"players?nickname={user}"))
                 {
@@ -70,7 +73,7 @@ namespace DiscordBot.Modules
             using (var httpClient = new HttpClient { BaseAddress = baseAddress })
             {
 
-                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", Keys.faceit);
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "your-api-token");
 
                 using (var response = await httpClient.GetAsync($"players/{user}/games/{game}/stats"))
                 {
@@ -123,7 +126,7 @@ namespace DiscordBot.Modules
             using (var httpClient = new HttpClient { BaseAddress = baseAddress })
             {
 
-                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", Keys.faceit);
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "your-api-token");
 
                 using (var response = await httpClient.GetAsync($"players/{user}/games/csgo/history?limit=10"))
                 {
@@ -161,7 +164,7 @@ namespace DiscordBot.Modules
             using (var httpClient = new HttpClient { BaseAddress = baseAddress })
             {
 
-                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", Keys.faceit);
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "your-api-token");
 
                 using (var response = await httpClient.GetAsync($"matches/{matchid}"))
                 {

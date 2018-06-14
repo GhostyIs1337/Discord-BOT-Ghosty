@@ -1,11 +1,14 @@
-﻿using Discord;
-using Discord.Commands;
-using DiscordBot.Services;
-using Newtonsoft.Json;
-using System;
-using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
-using DiscordBot.API_Keys;
+using Discord.Commands;
+using Discord.WebSocket;
+using Discord;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Net;
+using DiscordBot.Services;
 
 namespace DiscordBot.Modules
 {
@@ -21,23 +24,24 @@ namespace DiscordBot.Modules
 
             using (var httpClient = new HttpClient { BaseAddress = baseAddress })
             {
-                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("trn-api-key", "" + Keys.BF1);
+
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("trn-api-key", "your-api-token");
 
                 using (var response = await httpClient.GetAsync($"Stats/DetailedStats?platform=3&displayName={user}"))
                 {
-                    var responseData = await response.Content.ReadAsStringAsync();
+                    string responseData = await response.Content.ReadAsStringAsync();
 
-                    var bfStats = JsonConvert.DeserializeObject<BF1Json>(responseData);
+                    BF1Json bfStats = JsonConvert.DeserializeObject<BF1Json>(responseData);
 
                     var displayName = bfStats.profile.displayName;
-                    var uRL = bfStats.profile.trackerUrl;
+                    var URL = bfStats.profile.trackerUrl;
                     var kills = bfStats.result.basicStats.kills;
                     var rank = bfStats.result.basicStats.rank;
                     var wins = bfStats.result.basicStats.wins;
                     var spm = bfStats.result.basicStats.spm;
                     var timePlayed = bfStats.result.basicStats.timePlayed;
                     var favClass = bfStats.result.favoriteClass;
-                    var hS = bfStats.result.headShots;
+                    var HS = bfStats.result.headShots;
                     var longHS = bfStats.result.longestHeadShot;
                     var dogsTaken = bfStats.result.dogtagsTaken;
                     var highKS = bfStats.result.highestKillStreak;
@@ -48,19 +52,22 @@ namespace DiscordBot.Modules
                     };
 
                     embed.Title = $"**{displayName}** information:";
-                    embed.Description = $"Tracker URL: **{uRL}**\n"
+                    embed.Description = $"Tracker URL: **{URL}**\n"
                         + $"Rank: **{rank}**\n"
                         + $"Kills: **{kills}**\n"
                         + $"Wins: **{wins}**\n"
                         + $"Score per minute: **{spm}**\n"
                         + $"Favorite class: **{favClass}**\n"
                         + $"Dog tags taken: **{dogsTaken}**\n"
-                        + $"Headshots: **{hS}**\n"
+                        + $"Headshots: **{HS}**\n"
                         + $"Longest headshot: **{longHS}**\n"
                         + $"Highest kill streak: **{highKS}**\n"
                         + $"Time played: **{timePlayed}**";
 
+
+
                     await ReplyAsync("", false, embed.Build());
+
                 }
             }
         }

@@ -7,7 +7,7 @@ using SteamWebAPI2.Interfaces;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using DiscordBot.API_Keys;
+using DiscordBot.Services;
 
 namespace DiscordBot
 {
@@ -34,8 +34,8 @@ namespace DiscordBot
 
             services = new ServiceCollection()
                 .AddSingleton(audioService)
-                .AddSingleton<ISteamUser>(new SteamUser("" + Keys.steam))
-                .AddSingleton<ISteamUserStats>(new SteamUserStats("" + Keys.steam))
+                .AddSingleton<ISteamUser>(new SteamUser("your-api-token"))
+                .AddSingleton<ISteamUserStats>(new SteamUserStats("your-api-token"))
                 .BuildServiceProvider();
 
             client.Log += Log;
@@ -47,7 +47,8 @@ namespace DiscordBot
             client.UserUnbanned += AnnounceUserUnbanned;
             client.GuildMemberUpdated += AnnounceUpdatedUser;
 
-            await client.LoginAsync(TokenType.Bot, "" + Keys.bot);
+            string token = "your-api-token"; // Remember to keep this private!
+            await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
             await InstallCommands();
 
@@ -59,7 +60,7 @@ namespace DiscordBot
             };
 
 
-            await client.SetGameAsync("Programming", "https://twitch.tv/Ghosty1337", StreamType.NotStreaming);
+            await client.SetGameAsync("Programming", "https://twitch.tv/Ghosty1337", StreamType.Twitch);
 
             // Block this task until the program is closed.
             await Task.Delay(-1);
@@ -149,11 +150,7 @@ namespace DiscordBot
         public async Task AnnounceUpdatedUser(SocketGuildUser user, SocketGuildUser newUser)
         {
             var logChannel = client.GetChannel(349220360836612108) as SocketTextChannel;
-
-            if (user.Nickname != newUser.Nickname)
-            {
-                await logChannel.SendMessageAsync($"User {user.Nickname} has changed his nickname to {newUser.Nickname}");
-            }
+            await logChannel.SendMessageAsync($"User {user.Nickname} has changed his nickname to {newUser.Nickname}");
         }
 
     }
